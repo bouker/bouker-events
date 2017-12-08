@@ -15,4 +15,3 @@ def create_app(config_object=None, config_pyfile=None):
     init_db(db, app)
 
     return app
-
