@@ -21,11 +21,12 @@ class Event(db.Model):
         :return:
         """
         status = False
-        if amount > self.available:
+        if amount < self.available:
             self.taken += amount
             status = True
         return status
 
     # TODO: as hybrid property
+    @property
     def available(self):
         return self.total - self.taken

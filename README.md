@@ -1,6 +1,8 @@
 # bouker-events
 
 
+![Build Status](https://travis-ci.org/bouker/bouker-events.svg?branch=master)
+
 ## Migrations
 
     flask db migrate
