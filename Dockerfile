@@ -6,4 +6,4 @@ ADD . /bouker/
 RUN pip install -r requirements.txt
 
 EXPOSE 8000
-ENTRYPOINT ["/usr/local/bin/gunicorn", "-b", ":8000", "app.wsgi:app"]
+ENTRYPOINT ["/usr/local/bin/gunicorn", "--config", "server.ini", "app.wsgi:app"]

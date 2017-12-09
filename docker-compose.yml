@@ -1,0 +1,20 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+     - "8000:8000"
+    environment:
+     - DB=bouker_events
+     - DB_USER=bouker_events
+     - DB_PASSWORD=passwd123
+    volumes:
+     - .:/bouker/
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=bouker_events
+      - POSTGRES_USER=bouker_events
+      - POSTGRES_PASSWORD=passwd123
+    ports:
+      - "5432:5432"

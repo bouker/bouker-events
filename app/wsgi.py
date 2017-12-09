@@ -6,8 +6,6 @@ from app.database import db
 from app.routes import configure_routes
 
 
-# TODO: load settings from envvars
-
 app = create_app(config_pyfile='config.py')
 migrate = Migrate(app, db)
 api = Api(app)

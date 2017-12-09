@@ -26,7 +26,6 @@ class Event(db.Model):
             status = True
         return status
 
-    # TODO: as hybrid property
     @property
     def available(self):
         return self.total - self.taken

@@ -1,13 +1,12 @@
 from datetime import datetime, timedelta
-from unittest import TestCase
-
-from app.database import db
 from app.models import Event
+from tests.utils import TestCase
 
 
-class EventTest(TestCase):
+class EventModelTest(TestCase):
 
     def setUp(self):
+        super(EventModelTest, self).setUp()
         self.event = Event(
             name="Mum's Birthday", description="Great party!",
             start_time=datetime.now() + timedelta(days=5),
