@@ -5,11 +5,12 @@ services:
     ports:
      - "8000:8000"
     environment:
-     - DB=bouker_events
-     - DB_USER=bouker_events
-     - DB_PASSWORD=passwd123
-    volumes:
-     - .:/bouker/
+     - SQLALCHEMY_DATABASE_URI=postgresql://bouker_events:passwd123@db/bouker_events
+     - FLASK_APP=/bouker/app/wsgi.py
+#    volumes:
+#     - .:/bouker/
+    links:
+     - db
   db:
     image: postgres
     environment:
