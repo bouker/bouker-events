@@ -56,3 +56,85 @@ class EventResourcesTest(TestCase):
             'taken': 0,
             'available': 10,
         })
+
+    def test_event_list_post(self):
+        event_dict = {
+            'name': 'Day of Pizza Concert',
+            'description': 'Great fun!',
+            'startTime': '2018-01-30T20:00:00+00:00',
+            'endTime': '2018-01-31T6:00:00+00:00',
+            'total': 200,
+        }
+        resp = self.app_client.post('/events', data=json.dumps(event_dict), content_type='application/json')
+        self.assertEqual(resp.status_code, 200)
+        with self.app.app_context():
+            event_count = Event.query.count()
+            self.assertEqual(event_count, 3)
+            event = Event.query.all()[2]
+            self.assertEqual(event.name, "Day of Pizza Concert")
+            self.assertEqual(event.start_time, datetime(year=2018, month=1, day=30, hour=20))
+            self.assertEqual(event.taken, 0)
+
+    def test_event_list_post_error_missing_start_time(self):
+        event_dict = {
+            'name': 'Day of Pizza Concert',
+        }
+        resp = self.app_client.post('/events', data=json.dumps(event_dict), content_type='application/json')
+        data = json.loads(resp.get_data(as_text=True))
+        self.assertEqual(resp.status_code, 400)
+        self.assertIn('startTime', data)
+
+    def test_event_list_post_error_invalid_total(self):
+        event_dict = {
+            'name': 'Day of Pizza Concert',
+            'startTime': '2018-01-30T20:00:00+00:00',
+            'total': 'Something but not a number',
+        }
+        resp = self.app_client.post('/events', data=json.dumps(event_dict), content_type='application/json')
+        data = json.loads(resp.get_data(as_text=True))
+        self.assertEqual(resp.status_code, 400)
+        self.assertIn('total', data)
+
+    def test_event_post(self):
+        event_dict = {
+            'number': '5',
+        }
+        resp = self.app_client.post('/events/%s' % self.event_id,
+                                    data=json.dumps(event_dict),
+                                    content_type='application/json')
+        self.assertEqual(resp.status_code, 200)
+        with self.app.app_context():
+            self.assertEqual(Event.query.get(self.event_id).taken, 5)
+
+    def test_event_post_number_too_big(self):
+        event_dict = {
+            'number': '100',
+        }
+        resp = self.app_client.post('/events/%s' % self.event_id,
+                                    data=json.dumps(event_dict),
+                                    content_type='application/json')
+        data = json.loads(resp.get_data(as_text=True))
+        self.assertEqual(resp.status_code, 422)
+        self.assertIn('number', data)
+
+    def test_event_post_number_decreases_to_negative_taken(self):
+        event_dict = {
+            'number': '-30',
+        }
+        resp = self.app_client.post('/events/%s' % self.event_id,
+                                    data=json.dumps(event_dict),
+                                    content_type='application/json')
+        data = json.loads(resp.get_data(as_text=True))
+        self.assertEqual(resp.status_code, 422)
+        self.assertIn('number', data)
+
+    def test_event_post_event_does_not_exist(self):
+        event_dict = {
+            'number': '5',
+        }
+        resp = self.app_client.post('/events/%s' % 10000,
+                                    data=json.dumps(event_dict),
+                                    content_type='application/json')
+        data = json.loads(resp.get_data(as_text=True))
+        self.assertEqual(resp.status_code, 404)
+        self.assertIn('id', data)

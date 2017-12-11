@@ -7,8 +7,8 @@ services:
     environment:
      - SQLALCHEMY_DATABASE_URI=postgresql://bouker_events:passwd123@db/bouker_events
      - FLASK_APP=/bouker/app/wsgi.py
-#    volumes:
-#     - .:/bouker/
+    volumes:
+     - .:/bouker/
     links:
      - db
   db:

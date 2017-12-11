@@ -11,7 +11,7 @@ class Event(db.Model):
     start_time = db.Column(DateTime, nullable=False)
     end_time = db.Column(DateTime)
     total = db.Column(Integer)
-    taken = db.Column(Integer)
+    taken = db.Column(Integer, default=0)
 
     def book(self, amount):
         """
