@@ -6,7 +6,7 @@ class EventSchema(Schema):
     name = fields.String(required=True)
     description = fields.String()
     start_time = fields.DateTime(dump_to='startTime', load_from='startTime', format='iso', required=True)
-    end_time = fields.DateTime(dump_to='endTime', load_from='startTime', format='iso')
+    end_time = fields.DateTime(dump_to='endTime', load_from='endTime', format='iso')
     total = fields.Integer()
     taken = fields.Integer(dump_only=True)
     available = fields.Integer(dump_only=True)

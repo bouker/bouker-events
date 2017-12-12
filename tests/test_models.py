@@ -20,6 +20,9 @@ class EventModelTest(TestCase):
         self.assertEqual(self.event.available, 10)
         self.event.taken = 4
         self.assertEqual(self.event.available, 6)
+        self.event.total = None
+        self.event.taken = 5
+        self.assertEqual(self.event.available, None)
 
     def test_book(self):
         self.assertEqual(self.event.taken, 0)

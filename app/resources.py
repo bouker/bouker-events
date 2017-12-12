@@ -23,10 +23,9 @@ class EventListResource(Resource):
         if errors:
             return errors, 400
         event = Event(name=data['name'],
-                      description=data['description'],
-                      start_time=data['start_time'],
-                      end_time=data['end_time'],
-                      total=data['total'])
+                      start_time=data['start_time'])
+        for key, value in data.items():
+            setattr(event, key, value)
         db.session.add(event)
         db.session.commit()
         return
@@ -40,6 +39,8 @@ class EventResource(Resource):
         :param event_id:
         """
         event = Event.query.get(event_id)
+        if not event:
+            return {'id': ['event not found']}, 404
         return EventSchema().dump(event).data
 
     def post(self, event_id):
@@ -66,3 +67,15 @@ class EventResource(Resource):
             return {'number': ['number cannot be less than zero']}, 422
         db.session.commit()
         return
+
+    def delete(self, event_id):
+        """
+        Returns specific event data
+        :param event_id:
+        """
+        event = Event.query.get(event_id)
+        if not event:
+            return {'id': ['event not found']}, 404
+        db.session.delete(event)
+        db.session.commit()
+        return None, 204

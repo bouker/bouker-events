@@ -138,3 +138,11 @@ class EventResourcesTest(TestCase):
         data = json.loads(resp.get_data(as_text=True))
         self.assertEqual(resp.status_code, 404)
         self.assertIn('id', data)
+
+    def test_event_delete(self):
+        resp = self.app_client.delete('/events/%s' % self.event_id)
+        self.assertEqual(resp.status_code, 204)
+        with self.app.app_context():
+            event_count = Event.query.count()
+            self.assertEqual(event_count, 1)
+            self.assertNotIn(self.event, Event.query.all())

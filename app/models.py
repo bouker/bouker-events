@@ -28,4 +28,6 @@ class Event(db.Model):
 
     @property
     def available(self):
-        return self.total - self.taken
+        if self.total:
+            return self.total - self.taken
+        return None
