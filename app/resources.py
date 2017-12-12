@@ -6,6 +6,13 @@ from app.models import Event
 from app.schemas import EventSchema, EventBookSchema
 
 
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,DELETE')
+    return response
+
+
 class EventListResource(Resource):
 
     def get(self):

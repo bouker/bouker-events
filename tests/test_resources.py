@@ -146,3 +146,10 @@ class EventResourcesTest(TestCase):
             event_count = Event.query.count()
             self.assertEqual(event_count, 1)
             self.assertNotIn(self.event, Event.query.all())
+
+    def test_event_list_cors(self):
+        resp = self.app_client.get('/events')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.headers['Access-Control-Allow-Origin'], '*')
+        self.assertEqual(resp.headers['Access-Control-Allow-Headers'], 'Content-Type,Authorization')
+        self.assertEqual(resp.headers['Access-Control-Allow-Methods'], 'GET,POST,DELETE')
