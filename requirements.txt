@@ -1,0 +1,14 @@
+Flask==0.12.2
+Flask-SQLAlchemy==2.3.2
+Flask-Migrate==2.1.1
+Flask-RESTful==0.3.6
+marshmallow==2.15.0
+requests==2.18.4
+psycopg2==2.7.3.2
+gunicorn==19.7.1
+pytest==3.3.0
+pytest-cov==2.5.1
+pycodestyle==2.3.1
+httpretty==0.8.14
+ptpython==0.41
+
