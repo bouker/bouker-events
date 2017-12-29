@@ -1,5 +1,9 @@
+import logging.config
 from sqlalchemy import String, Integer, Text, DateTime
 from .database import db
+
+logging.config.fileConfig('logging.ini')
+logger = logging.getLogger(__name__)
 
 
 class Event(db.Model):
@@ -24,6 +28,8 @@ class Event(db.Model):
         if amount < self.available:
             self.taken += amount
             status = True
+            logger.info("Event %s: booked %s items, %s left", self.id, amount, self.available)
+        logger.warning("Event %s: cannot book %s items, %s left", self.id, amount, self.available)
         return status
 
     @property
