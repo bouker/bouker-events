@@ -6,6 +6,7 @@ services:
      - "8000:8000"
     environment:
      - SQLALCHEMY_DATABASE_URI=postgresql://bouker_events:passwd123@db/bouker_events
+     - BOUKER_LOGGING_URL=lb-bouker-1258116752.eu-central-1.elb.amazonaws.com
     volumes:
      - .:/bouker/
     links:

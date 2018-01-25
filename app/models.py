@@ -1,9 +1,12 @@
 import logging.config
 from sqlalchemy import String, Integer, Text, DateTime
-from .database import db
+
+from app.logging import default_handler
+from app.database import db
 
 logging.config.fileConfig('logging.ini')
 logger = logging.getLogger(__name__)
+logger.addHandler(default_handler)
 
 
 class Event(db.Model):
