@@ -1,4 +1,5 @@
 import logging.config
+import graypy
 from flask import request
 from flask_restful import Resource
 
@@ -9,6 +10,9 @@ from app.schemas import EventSchema, EventBookSchema
 
 logging.config.fileConfig('logging.ini')
 logger = logging.getLogger(__name__)
+graylog_handler = graypy.GELFHandler(host='lb-bouker-1258116752.eu-central-1.elb.amazonaws.com', port=12201,
+                                     facility='bouker-events')
+logger.addHandler(graylog_handler)
 
 
 def after_request(response):
@@ -32,9 +36,10 @@ class EventListResource(Resource):
         """
         Creates new event
         """
-        logger.info("Creating new event, data: %s", request.get_json())
         data, errors = EventSchema().load(request.get_json())
+        logger.info("Creating new event, data: %s", request.get_json())
         if errors:
+            logger.info("Cannot create event, data: %s", request.get_json())
             return errors, 400
         event = Event(name=data['name'],
                       start_time=data['start_time'])
@@ -42,6 +47,7 @@ class EventListResource(Resource):
             setattr(event, key, value)
         db.session.add(event)
         db.session.commit()
+        logger.info("Event created, data: %s", request.get_json())
         return
 
 

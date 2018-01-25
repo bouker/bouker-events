@@ -11,4 +11,4 @@ pytest-cov==2.5.1
 pycodestyle==2.3.1
 httpretty==0.8.14
 ptpython==0.41
-
+graypy==0.2.14
